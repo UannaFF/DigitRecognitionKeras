@@ -3,10 +3,16 @@ from keras.datasets import mnist
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.utils import np_utils
+from keras.preprocessing.image import ImageDataGenerator
 
 numNeuron = 32
 numClass = 10
 pixels = 784
+
+def data_augmentation(trainSet):
+	datagen = ImageDataGenerator()
+	datagen.fit(trainSet);
+	#x_batch, y_batch = datagen.flow(train, train, batch_size=32)
 
 #define model
 def model():
