@@ -1,11 +1,16 @@
 import numpy
+import sys
 from keras.datasets import mnist
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.utils import np_utils
 from keras.preprocessing.image import ImageDataGenerator
 
-numNeuron = 32
+if len(sys.argv) != 4:
+    print("Usage: file.py numNeuron epochsNumb batchSize")
+    sys.exit()
+
+numNeuron = int(sys.argv[1])
 numClass = 10
 pixels = 784
 
@@ -44,9 +49,42 @@ y_test = np_utils.to_categorical(y_test)
 num_classes = y_test.shape[1]
 
 model = model()
+epochsNumb = int(sys.argv[2])
+batchSize = int(sys.argv[3])
 # Fit the model
-model.fit(X_train, y_train, epochs=150, batch_size=10)
+model.fit(X_train, y_train, epochs=epochsNumb, batch_size=batchSize)
 
 # evaluate the model
-scores = model.evaluate(X, Y)
+scores = model.evaluate(X_train, y_train)
 print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
+print("\nEpoch: %d, Batch size: %d" % (epochsNumb, batchSize))
+
+print("\nMaking predictions\n")
+# calculate predictions
+predictions = model.predict(X_test)
+# Compare predictions
+class_counter = [0] * 10
+for x,y in zip(predictions,y_test):
+    # print wrong predictions
+    for i in range(10):
+        if round(x[i]) == 1 and round(x[i]) != round(y[i]):
+            class_counter[i] = class_counter[i] + 1
+            # print("Failed")
+            # print("[", end="")
+            # for i in range(10):
+            #     if i != 9:
+            #         print("%d-" % round(x[i]), end="")
+            #     else:
+            #         print("%d]" % round(x[i]))
+            # # print y_test
+            # print("[", end="")
+            # for i in range(10):
+            #     if i != 9:
+            #         print("%d-" % round(y[i]), end="")
+            #     else:
+            #         print("%d]" % round(y[i]))
+            # print("\n")
+            break
+
+print("Class error counter: ", end="")
+print(class_counter)
