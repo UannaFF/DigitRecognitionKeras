@@ -3,11 +3,15 @@ import sys
 from keras.datasets import mnist
 from keras.models import Sequential
 from keras.layers import Dense
+from keras.layers import Dropout
 from keras.utils import np_utils
 
 if len(sys.argv) != 4:
     print("Usage: file.py numNeuron epochsNumb batchSize")
     sys.exit()
+
+seed = 7
+numpy.random.seed(seed)
 
 numNeuron = int(sys.argv[1])
 numClass = 10
@@ -17,7 +21,9 @@ pixels = 784
 def model():
     model = Sequential()
     model.add(Dense(numNeuron, input_dim=pixels, activation="relu"))
+    model.add(Dropout(0.2, noise_shape=None, seed=seed))
     model.add(Dense(numClass, activation="softmax"))
+
     #model.add(Dense(1, activation='sigmoid'))
     # Compile model
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
