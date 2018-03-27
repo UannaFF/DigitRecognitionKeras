@@ -3,6 +3,7 @@ import sys
 from keras.datasets import mnist
 from keras.models import Sequential
 from keras.layers import Dense
+from keras.layers import Dropout
 from keras.utils import np_utils
 from keras.preprocessing.image import ImageDataGenerator
 import matplotlib as mpl
@@ -15,6 +16,9 @@ K.set_image_dim_ordering('th')
 if len(sys.argv) != 4:
     print("Usage: file.py numNeuron epochsNumb batchSize")
     sys.exit()
+
+seed = 7
+numpy.random.seed(seed)
 
 numNeuron = int(sys.argv[1])
 numClass = 10
@@ -76,7 +80,9 @@ def plot_history(history):
 def model():
     model = Sequential()
     model.add(Dense(numNeuron, input_dim=pixels, activation="relu"))
+    model.add(Dropout(0.2, noise_shape=None, seed=seed))
     model.add(Dense(numClass, activation="softmax"))
+
     #model.add(Dense(1, activation='sigmoid'))
     #optimizer
 	adamOptimizer = keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
