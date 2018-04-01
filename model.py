@@ -125,6 +125,7 @@ num_classes = y_test.shape[1]
 
 epochsNumb = int(sys.argv[2])
 batchSize = int(sys.argv[3])
+
 # Fit the model
 history = model.fit(X_train, y_train, epochs=epochsNumb, batch_size=batchSize)
 
